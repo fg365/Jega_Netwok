@@ -1,0 +1,5903 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<title>Jega Printing - Invoice Management</title>
+
+
+
+<script src="https\://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+
+
+<style>
+
+
+
+*{
+
+    box-sizing:border-box;
+
+    margin:0;
+
+    padding:0;
+
+    font-family:Arial,Helvetica,sans-serif;
+
+}
+
+
+
+body{
+
+    background:#f3f5f9;
+
+    color:#222;
+
+}
+
+
+
+header{
+
+    background:#111827;
+
+    color:white;
+
+    padding:16px 6%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+}
+
+
+
+.logo{
+
+    font-size:25px;
+
+    font-weight:bold;
+
+}
+
+
+
+.logo span{
+
+    color:#38bdf8;
+
+}
+
+
+
+nav{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+
+
+nav button{
+
+    background:transparent;
+
+    border:0;
+
+    color:white;
+
+    padding:10px 16px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    border-radius:7px;
+
+}
+
+
+
+nav button:hover,
+
+nav button.active{
+
+    background:#2563eb;
+
+}
+
+
+
+.container{
+
+    width:92%;
+
+    max-width:1200px;
+
+    margin:30px auto;
+
+}
+
+
+
+.page{
+
+    display:none;
+
+}
+
+
+
+.page.active{
+
+    display:block;
+
+}
+
+
+
+.hero{
+
+    background:linear-gradient(135deg,#1d4ed8,#111827);
+
+    color:white;
+
+    padding:70px 30px;
+
+    border-radius:18px;
+
+    text-align:center;
+
+}
+
+
+
+.hero h1{
+
+    font-size:42px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+.hero p{
+
+    font-size:18px;
+
+    opacity:.9;
+
+}
+
+
+
+.card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:14px;
+
+    box-shadow:0 4px 20px rgba(0,0,0,.07);
+
+    margin-bottom:25px;
+
+}
+
+
+
+.card h2{
+
+    margin-bottom:20px;
+
+    color:#111827;
+
+}
+
+
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:18px;
+
+}
+
+
+
+.form-group{
+
+    margin-bottom:15px;
+
+}
+
+
+
+label{
+
+    display:block;
+
+    font-weight:bold;
+
+    margin-bottom:7px;
+
+    font-size:14px;
+
+}
+
+
+
+input,
+
+textarea,
+
+select{
+
+    width:100%;
+
+    padding:12px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:7px;
+
+    outline:none;
+
+    font-size:14px;
+
+}
+
+
+
+input:focus,
+
+textarea:focus,
+
+select:focus{
+
+    border-color:#2563eb;
+
+}
+
+
+
+textarea{
+
+    min-height:90px;
+
+    resize:vertical;
+
+}
+
+
+
+.btn{
+
+    border:0;
+
+    padding:12px 18px;
+
+    border-radius:7px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+    margin:4px;
+
+}
+
+
+
+.btn-primary{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+
+
+.btn-success{
+
+    background:#16a34a;
+
+    color:white;
+
+}
+
+
+
+.btn-danger{
+
+    background:#dc2626;
+
+    color:white;
+
+}
+
+
+
+.btn-dark{
+
+    background:#111827;
+
+    color:white;
+
+}
+
+
+
+.btn-warning{
+
+    background:#f59e0b;
+
+    color:white;
+
+}
+
+
+
+.btn-print{
+
+    background:#7c3aed;
+
+    color:white;
+
+}
+
+
+
+.btn:hover{
+
+    opacity:.88;
+
+}
+
+
+
+.items-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:15px;
+
+}
+
+
+
+.items-table th,
+
+.items-table td{
+
+    border:1px solid #ddd;
+
+    padding:9px;
+
+}
+
+
+
+.items-table th{
+
+    background:#111827;
+
+    color:white;
+
+}
+
+
+
+.items-table input{
+
+    border:0;
+
+    padding:7px;
+
+}
+
+
+
+.remove-btn{
+
+    background:#dc2626;
+
+    color:white;
+
+    border:0;
+
+    padding:7px 10px;
+
+    border-radius:5px;
+
+    cursor:pointer;
+
+}
+
+
+
+.total-box{
+
+    margin-left:auto;
+
+    max-width:350px;
+
+    margin-top:20px;
+
+}
+
+
+
+.total-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:9px;
+
+    border-bottom:1px solid #ddd;
+
+}
+
+
+
+.total-row.final{
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    background:#f3f4f6;
+
+}
+
+
+
+.invoice-preview{
+
+    background:white;
+
+    padding:35px;
+
+    max-width:850px;
+
+    margin:20px auto;
+
+    border:1px solid #ddd;
+
+}
+
+
+
+.invoice-head{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    border-bottom:2px solid #111827;
+
+    padding-bottom:20px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.invoice-company h1{
+
+    color:#2563eb;
+
+}
+
+
+
+.invoice-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+}
+
+
+
+.invoice-table th,
+
+.invoice-table td{
+
+    padding:10px;
+
+    border:1px solid #ddd;
+
+}
+
+
+
+.invoice-table th{
+
+    background:#111827;
+
+    color:white;
+
+}
+
+
+
+.admin-login{
+
+    max-width:450px;
+
+    margin:40px auto;
+
+}
+
+
+
+.admin-panel{
+
+    display:none;
+
+}
+
+
+
+.saved-invoice{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    padding:15px;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    margin-bottom:10px;
+
+    background:#fff;
+
+}
+
+
+
+.saved-actions{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    justify-content:flex-end;
+
+}
+
+
+
+.badge{
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+    padding:5px 9px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+}
+
+
+
+.search-box{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.search-box input{
+
+    flex:1;
+
+}
+
+
+
+.empty-message{
+
+    text-align:center;
+
+    padding:25px;
+
+    color:#666;
+
+}
+
+
+
+footer{
+
+    background:#111827;
+
+    color:white;
+
+    text-align:center;
+
+    padding:25px;
+
+    margin-top:50px;
+
+}
+
+
+
+footer a{
+
+    color:#38bdf8;
+
+    text-decoration:none;
+
+}
+
+
+
+@media(max-width:700px){
+
+
+
+    .grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+
+    header{
+
+        flex-direction:column;
+
+        gap:12px;
+
+    }
+
+
+
+    nav{
+
+        flex-wrap:wrap;
+
+        justify-content:center;
+
+    }
+
+
+
+    .hero h1{
+
+        font-size:30px;
+
+    }
+
+
+
+    .items-table{
+
+        font-size:12px;
+
+    }
+
+
+
+    .invoice-preview{
+
+        padding:15px;
+
+    }
+
+
+
+    .saved-invoice{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+
+
+    .saved-actions{
+
+        justify-content:flex-start;
+
+    }
+
+
+
+    .search-box{
+
+        flex-direction:column;
+
+    }
+
+}
+
+
+
+
+
+/* =========================
+
+   PRINT STYLE
+
+========================= */
+
+
+
+@media print{
+
+
+
+    body{
+
+        background:white;
+
+    }
+
+
+
+    body *{
+
+        visibility:hidden;
+
+    }
+
+
+
+    #invoicePreview,
+
+    #invoicePreview *{
+
+        visibility:visible;
+
+    }
+
+
+
+    #invoicePreview{
+
+        position:absolute;
+
+        left:0;
+
+        top:0;
+
+        width:100%;
+
+        max-width:none;
+
+        margin:0;
+
+        border:0;
+
+        box-shadow:none;
+
+    }
+
+
+
+    @page{
+
+        size:A4;
+
+        margin:10mm;
+
+    }
+
+}
+
+
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+
+<header>
+
+
+
+    <div class="logo">
+
+        JEGA<span>PRINTING</span>
+
+    </div>
+
+
+
+    <nav>
+
+
+
+        <button
+
+            onclick="showPage('home')"
+
+            id="navHome"
+
+            class="active">
+
+            Home
+
+        </button>
+
+
+
+        <button
+
+            onclick="showPage('invoice')"
+
+            id="navInvoice">
+
+            Invoice
+
+        </button>
+
+
+
+        <button
+
+            onclick="showPage('contact')"
+
+            id="navContact">
+
+            Contact
+
+        </button>
+
+
+
+        <button
+
+            onclick="showPage('admin')"
+
+            id="navAdmin">
+
+            Admin
+
+        </button>
+
+
+
+    </nav>
+
+
+
+</header>
+
+
+
+
+
+<!-- =========================
+
+     HOME
+
+========================= -->
+
+
+
+<section id="home" class="page active">
+
+
+
+<div class="container">
+
+
+
+    <div class="hero">
+
+
+
+        <h1>Jega Printing</h1>
+
+
+
+        <p>
+
+            Professional Invoice Management System
+
+        </p>
+
+
+
+        <br>
+
+
+
+        <button
+
+            class="btn btn-primary"
+
+            onclick="showPage('invoice')">
+
+
+
+            Create New Invoice
+
+
+
+        </button>
+
+
+
+    </div>
+
+
+
+    <br>
+
+
+
+    <div class="grid">
+
+
+
+        <div class="card">
+
+
+
+            <h2>🧾 Create Invoice</h2>
+
+
+
+            <p>
+
+                Customer details, products, quantity,
+
+                price, GST மற்றும் total amount fill
+
+                செய்து invoice உருவாக்கலாம்.
+
+            </p>
+
+
+
+        </div>
+
+
+
+
+
+        <div class="card">
+
+
+
+            <h2>💾 Save & Store</h2>
+
+
+
+            <p>
+
+                உருவாக்கிய invoices browser storage-ல்
+
+                save ஆகும். Invoice number வைத்து
+
+                பின்னாலும் search செய்து எடுக்கலாம்.
+
+            </p>
+
+
+
+        </div>
+
+
+
+
+
+        <div class="card">
+
+
+
+            <h2>📥 Download PDF</h2>
+
+
+
+            <p>
+
+                Invoice ready ஆனதும் professional PDF
+
+                format-ல் download செய்து customer-க்கு
+
+                share செய்யலாம்.
+
+            </p>
+
+
+
+        </div>
+
+
+
+
+
+        <div class="card">
+
+
+
+            <h2>🖨 Print Invoice</h2>
+
+
+
+            <p>
+
+                Saved invoice-ஐ எப்போது வேண்டுமானாலும்
+
+                மீண்டும் open செய்து direct printer-க்கு
+
+                print கொடுக்கலாம்.
+
+            </p>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+
+     INVOICE
+
+========================= -->
+
+
+
+<section id="invoice" class="page">
+
+
+
+<div class="container">
+
+
+
+<div class="card">
+
+
+
+<h2>Create New Invoice</h2>
+
+
+
+
+
+<div class="grid">
+
+
+
+<div class="form-group">
+
+
+
+<label>Invoice Number</label>
+
+
+
+<input
+
+    type="text"
+
+    id="invoiceNo"
+
+    placeholder="INV-0001">
+
+
+
+</div>
+
+
+
+
+
+<div class="form-group">
+
+
+
+<label>Invoice Date</label>
+
+
+
+<input
+
+    type="date"
+
+    id="invoiceDate">
+
+
+
+</div>
+
+
+
+
+
+<div class="form-group">
+
+
+
+<label>Customer Name</label>
+
+
+
+<input
+
+    type="text"
+
+    id="customerName"
+
+    placeholder="Customer Name">
+
+
+
+</div>
+
+
+
+
+
+<div class="form-group">
+
+
+
+<label>Customer Phone</label>
+
+
+
+<input
+
+    type="text"
+
+    id="customerPhone"
+
+    placeholder="Phone Number">
+
+
+
+</div>
+
+
+
+
+
+<div class="form-group">
+
+
+
+<label>Customer Email</label>
+
+
+
+<input
+
+    type="email"
+
+    id="customerEmail"
+
+    placeholder="Email">
+
+
+
+</div>
+
+
+
+
+
+<div class="form-group">
+
+
+
+<label>Customer Address</label>
+
+
+
+<textarea
+
+    id="customerAddress"
+
+    placeholder="Customer Address"></textarea>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<h3>Invoice Items</h3>
+
+
+
+
+
+<table
+
+    class="items-table"
+
+    id="itemsTable">
+
+
+
+<thead>
+
+
+
+<tr>
+
+
+
+<th>Product / Service</th>
+
+<th>Qty</th>
+
+<th>Price</th>
+
+<th>Total</th>
+
+<th>Remove</th>
+
+
+
+</tr>
+
+
+
+</thead>
+
+
+
+<tbody id="itemsBody"></tbody>
+
+
+
+</table>
+
+
+
+
+
+<br>
+
+
+
+
+
+<button
+
+    class="btn btn-primary"
+
+    onclick="addItem()">
+
+
+
+    + Add Item
+
+
+
+</button>
+
+
+
+
+
+<div class="total-box">
+
+
+
+<div class="total-row">
+
+
+
+<span>Subtotal</span>
+
+
+
+<strong id="subtotal">
+
+₹0.00
+
+</strong>
+
+
+
+</div>
+
+
+
+
+
+<div class="total-row">
+
+
+
+<span>GST (%)</span>
+
+
+
+<input
+
+    type="number"
+
+    id="gst"
+
+    value="0"
+
+    min="0"
+
+    onchange="calculateTotal()"
+
+    style="width:100px">
+
+
+
+</div>
+
+
+
+
+
+<div class="total-row">
+
+
+
+<span>GST Amount</span>
+
+
+
+<strong id="gstAmount">
+
+₹0.00
+
+</strong>
+
+
+
+</div>
+
+
+
+
+
+<div class="total-row final">
+
+
+
+<span>Grand Total</span>
+
+
+
+<strong id="grandTotal">
+
+₹0.00
+
+</strong>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<br>
+
+
+
+
+
+<button
+
+    class="btn btn-success"
+
+    onclick="saveInvoice()">
+
+
+
+    💾 Save Invoice
+
+
+
+</button>
+
+
+
+
+
+<button
+
+    class="btn btn-dark"
+
+    onclick="generatePreview()">
+
+
+
+    👁 Preview Invoice
+
+
+
+</button>
+
+
+
+
+
+<button
+
+    class="btn btn-print"
+
+    onclick="printCurrentInvoice()">
+
+
+
+    🖨 Print
+
+
+
+</button>
+
+
+
+
+
+<button
+
+    class="btn btn-primary"
+
+    onclick="downloadCurrentInvoice()">
+
+
+
+    📥 Download PDF
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =========================
+
+     PREVIEW
+
+========================= -->
+
+
+
+<div
+
+    id="invoicePreview"
+
+    class="invoice-preview">
+
+
+
+<div class="invoice-head">
+
+
+
+<div class="invoice-company">
+
+
+
+<h1>JEGA PRINTING</h1>
+
+
+
+<p>
+
+Professional Printing & Designing
+
+</p>
+
+
+
+<p>
+
+Email: Jegaprinting4015@mail.com
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+<div>
+
+
+
+<h2>INVOICE</h2>
+
+
+
+<p>
+
+<strong>No:</strong>
+
+<span id="pInvoiceNo">-</span>
+
+</p>
+
+
+
+<p>
+
+<strong>Date:</strong>
+
+<span id="pDate">-</span>
+
+</p>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div style="margin-bottom:20px">
+
+
+
+<h3>Bill To</h3>
+
+
+
+<p>
+
+<strong id="pCustomerName">
+
+Customer Name
+
+</strong>
+
+</p>
+
+
+
+<p id="pCustomerPhone"></p>
+
+
+
+<p id="pCustomerEmail"></p>
+
+
+
+<p id="pCustomerAddress"></p>
+
+
+
+</div>
+
+
+
+
+
+<table class="invoice-table">
+
+
+
+<thead>
+
+
+
+<tr>
+
+
+
+<th>Service / Product</th>
+
+<th>Qty</th>
+
+<th>Price</th>
+
+<th>Total</th>
+
+
+
+</tr>
+
+
+
+</thead>
+
+
+
+<tbody id="previewItems"></tbody>
+
+
+
+</table>
+
+
+
+
+
+<div class="total-box">
+
+
+
+<div class="total-row">
+
+
+
+<span>Subtotal</span>
+
+
+
+<strong id="pSubtotal">
+
+₹0.00
+
+</strong>
+
+
+
+</div>
+
+
+
+
+
+<div class="total-row">
+
+
+
+<span>GST</span>
+
+
+
+<strong id="pGST">
+
+₹0.00
+
+</strong>
+
+
+
+</div>
+
+
+
+
+
+<div class="total-row final">
+
+
+
+<span>Total</span>
+
+
+
+<strong id="pGrandTotal">
+
+₹0.00
+
+</strong>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<br>
+
+
+
+
+
+<p
+
+    style="
+
+    text-align:center;
+
+    border-top:1px solid #ddd;
+
+    padding-top:15px">
+
+
+
+    Thank you for your business!
+
+
+
+</p>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+
+     CONTACT
+
+========================= -->
+
+
+
+<section id="contact" class="page">
+
+
+
+<div class="container">
+
+
+
+<div class="card">
+
+
+
+<h2>Contact Us</h2>
+
+
+
+<div class="grid">
+
+
+
+<div>
+
+
+
+<h3>Jega Printing</h3>
+
+
+
+<br>
+
+
+
+<p>
+
+Professional Printing & Designing Services
+
+</p>
+
+
+
+<br>
+
+
+
+<p>📧 Email</p>
+
+
+
+<p>
+
+
+
+<a href="mailto:Jegaprinting4015@mail.com">
+
+Jegaprinting4015@mail.com
+
+</a>
+
+
+
+</p>
+
+
+
+<br>
+
+
+
+<p>
+
+For enquiries and business details,
+
+contact us through email.
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+<div>
+
+
+
+<form onsubmit="sendEnquiry(event)">
+
+
+
+<div class="form-group">
+
+
+
+<label>Name</label>
+
+
+
+<input
+
+    type="text"
+
+    id="contactName"
+
+    required>
+
+
+
+</div>
+
+
+
+
+
+<div class="form-group">
+
+
+
+<label>Email</label>
+
+
+
+<input
+
+    type="email"
+
+    id="contactEmail"
+
+    required>
+
+
+
+</div>
+
+
+
+
+
+<div class="form-group">
+
+
+
+<label>Message</label>
+
+
+
+<textarea
+
+    id="contactMessage"
+
+    required></textarea>
+
+
+
+</div>
+
+
+
+
+
+<button class="btn btn-primary">
+
+
+
+Send Enquiry
+
+
+
+</button>
+
+
+
+</form>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+
+     ADMIN
+
+========================= -->
+
+
+
+<section id="admin" class="page">
+
+
+
+<div class="container">
+
+
+
+
+
+<div
+
+    class="card admin-login"
+
+    id="loginBox">
+
+
+
+<h2>🔐 Admin Login</h2>
+
+
+
+
+
+<div class="form-group">
+
+
+
+<label>Username</label>
+
+
+
+<input
+
+    type="text"
+
+    id="adminUser">
+
+
+
+</div>
+
+
+
+
+
+<div class="form-group">
+
+
+
+<label>Password</label>
+
+
+
+<input
+
+    type="password"
+
+    id="adminPass">
+
+
+
+</div>
+
+
+
+
+
+<button
+
+    class="btn btn-primary"
+
+    onclick="adminLogin()">
+
+
+
+    Login
+
+
+
+</button>
+
+
+
+
+
+<p
+
+    id="loginError"
+
+    style="color:red;margin-top:10px">
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- ADMIN PANEL -->
+
+
+
+<div
+
+    class="admin-panel"
+
+    id="adminPanel">
+
+
+
+
+
+<div class="card">
+
+
+
+<h2>Admin Dashboard</h2>
+
+
+
+
+
+<div class="grid">
+
+
+
+
+
+<div
+
+    class="card"
+
+    style="background:#eff6ff">
+
+
+
+<h3>Total Invoices</h3>
+
+
+
+<h1 id="invoiceCount">
+
+0
+
+</h1>
+
+
+
+</div>
+
+
+
+
+
+<div
+
+    class="card"
+
+    style="background:#f0fdf4">
+
+
+
+<h3>Total Sales</h3>
+
+
+
+<h1 id="salesTotal">
+
+₹0
+
+</h1>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<button
+
+    class="btn btn-danger"
+
+    onclick="adminLogout()">
+
+
+
+    Logout
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- SEARCH -->
+
+
+
+<div class="card">
+
+
+
+<h2>
+
+🔎 Find Old Invoice
+
+</h2>
+
+
+
+<p style="margin-bottom:15px;color:#666">
+
+
+
+Invoice Number வைத்து எந்த பழைய invoice-ஐயும்
+
+search செய்யலாம்.
+
+
+
+</p>
+
+
+
+
+
+<div class="search-box">
+
+
+
+<input
+
+    type="text"
+
+    id="invoiceSearch"
+
+    placeholder="Example: INV-0001">
+
+
+
+<button
+
+    class="btn btn-primary"
+
+    onclick="searchInvoice()">
+
+
+
+    🔎 Search
+
+
+
+</button>
+
+
+
+
+
+<button
+
+    class="btn btn-dark"
+
+    onclick="clearInvoiceSearch()">
+
+
+
+    Show All
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+<div id="searchResult"></div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- SAVED INVOICES -->
+
+
+
+<div class="card">
+
+
+
+<h2>
+
+📁 Saved Invoices
+
+</h2>
+
+
+
+
+
+<div id="savedInvoices"></div>
+
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+<footer>
+
+
+
+<p>
+
+
+
+For enquiry :
+
+
+
+<a href="mailto:Jegaprinting4015@mail.com">
+
+
+
+Jegaprinting4015@mail.com
+
+
+
+</a>
+
+
+
+</p>
+
+
+
+
+
+<p style="margin-top:8px">
+
+
+
+© 2026 Jega Printing. All Rights Reserved.
+
+
+
+</p>
+
+
+
+</footer>
+
+
+
+
+
+
+
+<script>
+
+
+
+
+
+/* =====================================================
+
+   PAGE NAVIGATION
+
+===================================================== */
+
+
+
+function showPage(page){
+
+
+
+    document.querySelectorAll('.page')
+
+        .forEach(function(p){
+
+
+
+            p.classList.remove('active');
+
+
+
+        });
+
+
+
+
+
+    document.getElementById(page)
+
+        .classList.add('active');
+
+
+
+
+
+    document.querySelectorAll('nav button')
+
+        .forEach(function(btn){
+
+
+
+            btn.classList.remove('active');
+
+
+
+        });
+
+
+
+
+
+    if(page === 'home'){
+
+
+
+        document.getElementById('navHome')
+
+            .classList.add('active');
+
+
+
+    }
+
+
+
+
+
+    if(page === 'invoice'){
+
+
+
+        document.getElementById('navInvoice')
+
+            .classList.add('active');
+
+
+
+    }
+
+
+
+
+
+    if(page === 'contact'){
+
+
+
+        document.getElementById('navContact')
+
+            .classList.add('active');
+
+
+
+    }
+
+
+
+
+
+    if(page === 'admin'){
+
+
+
+        document.getElementById('navAdmin')
+
+            .classList.add('active');
+
+
+
+        loadSavedInvoices();
+
+
+
+    }
+
+
+
+
+
+    window.scrollTo(0,0);
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   DATE
+
+===================================================== */
+
+
+
+document.getElementById("invoiceDate").value =
+
+    new Date().toISOString().split("T")[0];
+
+
+
+
+
+
+
+/* =====================================================
+
+   GET ALL INVOICES
+
+===================================================== */
+
+
+
+function getAllInvoices(){
+
+
+
+    return JSON.parse(
+
+        localStorage.getItem("jegaInvoices")
+
+    ) || [];
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   GENERATE NEXT INVOICE NUMBER
+
+===================================================== */
+
+
+
+function generateInvoiceNumber(){
+
+
+
+    let invoices = getAllInvoices();
+
+
+
+    if(invoices.length === 0){
+
+
+
+        return "INV-0001";
+
+
+
+    }
+
+
+
+
+
+    let maxNumber = 0;
+
+
+
+
+
+    invoices.forEach(function(inv){
+
+
+
+        let match =
+
+            String(inv.invoiceNo)
+
+            .match(/(\d+)$/);
+
+
+
+
+
+        if(match){
+
+
+
+            let number =
+
+                parseInt(match[1],10);
+
+
+
+
+
+            if(number > maxNumber){
+
+
+
+                maxNumber = number;
+
+
+
+            }
+
+
+
+        }
+
+
+
+    });
+
+
+
+
+
+    return "INV-" +
+
+        String(maxNumber + 1)
+
+        .padStart(4,"0");
+
+
+
+}
+
+
+
+
+
+document.getElementById("invoiceNo").value =
+
+    generateInvoiceNumber();
+
+
+
+
+
+
+
+/* =====================================================
+
+   ADD ITEM
+
+===================================================== */
+
+
+
+function addItem(){
+
+
+
+    let tbody =
+
+        document.getElementById("itemsBody");
+
+
+
+
+
+    let row =
+
+        document.createElement("tr");
+
+
+
+
+
+    row.innerHTML = `
+
+
+
+        <td>
+
+
+
+            <input
+
+                type="text"
+
+                class="item-name"
+
+                placeholder="Design / Printing">
+
+
+
+        </td>
+
+
+
+
+
+        <td>
+
+
+
+            <input
+
+                type="number"
+
+                class="item-qty"
+
+                value="1"
+
+                min="1"
+
+                onchange="calculateTotal()">
+
+
+
+        </td>
+
+
+
+
+
+        <td>
+
+
+
+            <input
+
+                type="number"
+
+                class="item-price"
+
+                value="0"
+
+                min="0"
+
+                onchange="calculateTotal()">
+
+
+
+        </td>
+
+
+
+
+
+        <td class="item-total">
+
+
+
+            ₹0.00
+
+
+
+        </td>
+
+
+
+
+
+        <td>
+
+
+
+            <button
+
+                class="remove-btn"
+
+                onclick="removeItem(this)">
+
+
+
+                X
+
+
+
+            </button>
+
+
+
+        </td>
+
+
+
+    `;
+
+
+
+
+
+    tbody.appendChild(row);
+
+
+
+
+
+    calculateTotal();
+
+
+
+}
+
+
+
+
+
+addItem();
+
+
+
+
+
+
+
+/* =====================================================
+
+   REMOVE ITEM
+
+===================================================== */
+
+
+
+function removeItem(button){
+
+
+
+    button.closest("tr").remove();
+
+
+
+    calculateTotal();
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   CALCULATE TOTAL
+
+===================================================== */
+
+
+
+function calculateTotal(){
+
+
+
+    let rows =
+
+        document.querySelectorAll("#itemsBody tr");
+
+
+
+
+
+    let subtotal = 0;
+
+
+
+
+
+    rows.forEach(function(row){
+
+
+
+        let qty =
+
+            Number(
+
+                row.querySelector(".item-qty").value
+
+            ) || 0;
+
+
+
+
+
+        let price =
+
+            Number(
+
+                row.querySelector(".item-price").value
+
+            ) || 0;
+
+
+
+
+
+        let total =
+
+            qty * price;
+
+
+
+
+
+        row.querySelector(".item-total")
+
+            .innerText =
+
+            "₹" + total.toFixed(2);
+
+
+
+
+
+        subtotal += total;
+
+
+
+    });
+
+
+
+
+
+    let gstPercent =
+
+        Number(
+
+            document.getElementById("gst").value
+
+        ) || 0;
+
+
+
+
+
+    let gstAmount =
+
+        subtotal * gstPercent / 100;
+
+
+
+
+
+    let grandTotal =
+
+        subtotal + gstAmount;
+
+
+
+
+
+    document.getElementById("subtotal")
+
+        .innerText =
+
+        "₹" + subtotal.toFixed(2);
+
+
+
+
+
+    document.getElementById("gstAmount")
+
+        .innerText =
+
+        "₹" + gstAmount.toFixed(2);
+
+
+
+
+
+    document.getElementById("grandTotal")
+
+        .innerText =
+
+        "₹" + grandTotal.toFixed(2);
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   GET INVOICE DATA
+
+===================================================== */
+
+
+
+function getInvoiceData(){
+
+
+
+    let items = [];
+
+
+
+
+
+    document.querySelectorAll("#itemsBody tr")
+
+        .forEach(function(row){
+
+
+
+            let name =
+
+                row.querySelector(".item-name").value;
+
+
+
+
+
+            let qty =
+
+                Number(
+
+                    row.querySelector(".item-qty").value
+
+                ) || 0;
+
+
+
+
+
+            let price =
+
+                Number(
+
+                    row.querySelector(".item-price").value
+
+                ) || 0;
+
+
+
+
+
+            if(name.trim()){
+
+
+
+                items.push({
+
+
+
+                    name:name,
+
+
+
+                    qty:qty,
+
+
+
+                    price:price,
+
+
+
+                    total:qty * price
+
+
+
+                });
+
+
+
+            }
+
+
+
+        });
+
+
+
+
+
+    let subtotal =
+
+        items.reduce(function(sum,item){
+
+
+
+            return sum + item.total;
+
+
+
+        },0);
+
+
+
+
+
+    let gstPercent =
+
+        Number(
+
+            document.getElementById("gst").value
+
+        ) || 0;
+
+
+
+
+
+    let gstAmount =
+
+        subtotal * gstPercent / 100;
+
+
+
+
+
+    return {
+
+
+
+        invoiceNo:
+
+            document.getElementById("invoiceNo").value
+
+            .trim(),
+
+
+
+        date:
+
+            document.getElementById("invoiceDate").value,
+
+
+
+        customerName:
+
+            document.getElementById("customerName").value
+
+            .trim(),
+
+
+
+        customerPhone:
+
+            document.getElementById("customerPhone").value
+
+            .trim(),
+
+
+
+        customerEmail:
+
+            document.getElementById("customerEmail").value
+
+            .trim(),
+
+
+
+        customerAddress:
+
+            document.getElementById("customerAddress").value
+
+            .trim(),
+
+
+
+        items:items,
+
+
+
+        subtotal:subtotal,
+
+
+
+        gstPercent:gstPercent,
+
+
+
+        gstAmount:gstAmount,
+
+
+
+        grandTotal:
+
+            subtotal + gstAmount
+
+
+
+    };
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   SAVE INVOICE
+
+===================================================== */
+
+
+
+function saveInvoice(){
+
+
+
+    let data =
+
+        getInvoiceData();
+
+
+
+
+
+    if(!data.invoiceNo){
+
+
+
+        alert("Please enter invoice number.");
+
+
+
+        return;
+
+
+
+    }
+
+
+
+
+
+    if(!data.customerName){
+
+
+
+        alert("Please enter customer name.");
+
+
+
+        return;
+
+
+
+    }
+
+
+
+
+
+    if(data.items.length === 0){
+
+
+
+        alert("Please add at least one item.");
+
+
+
+        return;
+
+
+
+    }
+
+
+
+
+
+    let invoices =
+
+        getAllInvoices();
+
+
+
+
+
+    let existing =
+
+        invoices.findIndex(function(inv){
+
+
+
+            return inv.invoiceNo.toLowerCase()
+
+                === data.invoiceNo.toLowerCase();
+
+
+
+        });
+
+
+
+
+
+    if(existing >= 0){
+
+
+
+        if(!confirm(
+
+            "This invoice number already exists.\n\nDo you want to update it?"
+
+        )){
+
+
+
+            return;
+
+
+
+        }
+
+
+
+
+
+        invoices[existing] = data;
+
+
+
+    }else{
+
+
+
+        invoices.push(data);
+
+
+
+    }
+
+
+
+
+
+    localStorage.setItem(
+
+        "jegaInvoices",
+
+        JSON.stringify(invoices)
+
+    );
+
+
+
+
+
+    alert(
+
+        "Invoice " +
+
+        data.invoiceNo +
+
+        " saved successfully!"
+
+    );
+
+
+
+
+
+    document.getElementById("invoiceNo").value =
+
+        generateInvoiceNumber();
+
+
+
+
+
+    loadSavedInvoices();
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   PREVIEW
+
+===================================================== */
+
+
+
+function generatePreview(){
+
+
+
+    let data =
+
+        getInvoiceData();
+
+
+
+
+
+    document.getElementById("pInvoiceNo")
+
+        .innerText =
+
+        data.invoiceNo || "-";
+
+
+
+
+
+    document.getElementById("pDate")
+
+        .innerText =
+
+        data.date || "-";
+
+
+
+
+
+    document.getElementById("pCustomerName")
+
+        .innerText =
+
+        data.customerName || "Customer Name";
+
+
+
+
+
+    document.getElementById("pCustomerPhone")
+
+        .innerText =
+
+        data.customerPhone;
+
+
+
+
+
+    document.getElementById("pCustomerEmail")
+
+        .innerText =
+
+        data.customerEmail;
+
+
+
+
+
+    document.getElementById("pCustomerAddress")
+
+        .innerText =
+
+        data.customerAddress;
+
+
+
+
+
+    let tbody =
+
+        document.getElementById("previewItems");
+
+
+
+
+
+    tbody.innerHTML = "";
+
+
+
+
+
+    data.items.forEach(function(item){
+
+
+
+        let tr =
+
+            document.createElement("tr");
+
+
+
+
+
+        tr.innerHTML = `
+
+
+
+            <td>
+
+                ${escapeHTML(item.name)}
+
+            </td>
+
+
+
+            <td>
+
+                ${item.qty}
+
+            </td>
+
+
+
+            <td>
+
+                ₹${item.price.toFixed(2)}
+
+            </td>
+
+
+
+            <td>
+
+                ₹${item.total.toFixed(2)}
+
+            </td>
+
+
+
+        `;
+
+
+
+
+
+        tbody.appendChild(tr);
+
+
+
+    });
+
+
+
+
+
+    document.getElementById("pSubtotal")
+
+        .innerText =
+
+        "₹" + data.subtotal.toFixed(2);
+
+
+
+
+
+    document.getElementById("pGST")
+
+        .innerText =
+
+        "₹" + data.gstAmount.toFixed(2);
+
+
+
+
+
+    document.getElementById("pGrandTotal")
+
+        .innerText =
+
+        "₹" + data.grandTotal.toFixed(2);
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   PRINT CURRENT INVOICE
+
+===================================================== */
+
+
+
+function printCurrentInvoice(){
+
+
+
+    generatePreview();
+
+
+
+
+
+    setTimeout(function(){
+
+
+
+        window.print();
+
+
+
+    },300);
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   DOWNLOAD CURRENT PDF
+
+===================================================== */
+
+
+
+function downloadCurrentInvoice(){
+
+
+
+    generatePreview();
+
+
+
+
+
+    let invoiceNo =
+
+        document.getElementById("invoiceNo").value
+
+        || "invoice";
+
+
+
+
+
+    let element =
+
+        document.getElementById("invoicePreview");
+
+
+
+
+
+    let options = {
+
+
+
+        margin:10,
+
+
+
+        filename:
+
+            invoiceNo + ".pdf",
+
+
+
+        image:{
+
+            type:"jpeg",
+
+            quality:0.98
+
+        },
+
+
+
+        html2canvas:{
+
+            scale:2,
+
+            useCORS:true
+
+        },
+
+
+
+        jsPDF:{
+
+            unit:"mm",
+
+            format:"a4",
+
+            orientation:"portrait"
+
+        }
+
+
+
+    };
+
+
+
+
+
+    html2pdf()
+
+        .set(options)
+
+        .from(element)
+
+        .save();
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   ADMIN LOGIN
+
+===================================================== */
+
+
+
+function adminLogin(){
+
+
+
+    let username =
+
+        document.getElementById("adminUser").value;
+
+
+
+
+
+    let password =
+
+        document.getElementById("adminPass").value;
+
+
+
+
+
+    if(
+
+        username === "admin" &&
+
+        password === "12345"
+
+    ){
+
+
+
+        sessionStorage.setItem(
+
+            "jegaAdmin",
+
+            "true"
+
+        );
+
+
+
+
+
+        document.getElementById("loginBox")
+
+            .style.display =
+
+            "none";
+
+
+
+
+
+        document.getElementById("adminPanel")
+
+            .style.display =
+
+            "block";
+
+
+
+
+
+        loadSavedInvoices();
+
+
+
+
+
+    }else{
+
+
+
+        document.getElementById("loginError")
+
+            .innerText =
+
+            "Invalid username or password.";
+
+
+
+    }
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   ADMIN LOGOUT
+
+===================================================== */
+
+
+
+function adminLogout(){
+
+
+
+    sessionStorage.removeItem("jegaAdmin");
+
+
+
+
+
+    document.getElementById("loginBox")
+
+        .style.display =
+
+        "block";
+
+
+
+
+
+    document.getElementById("adminPanel")
+
+        .style.display =
+
+        "none";
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   LOAD SAVED INVOICES
+
+===================================================== */
+
+
+
+function loadSavedInvoices(){
+
+
+
+    if(
+
+        sessionStorage.getItem("jegaAdmin")
+
+        !== "true"
+
+    ){
+
+
+
+        document.getElementById("loginBox")
+
+            .style.display =
+
+            "block";
+
+
+
+
+
+        document.getElementById("adminPanel")
+
+            .style.display =
+
+            "none";
+
+
+
+
+
+        return;
+
+
+
+    }
+
+
+
+
+
+    document.getElementById("loginBox")
+
+        .style.display =
+
+        "none";
+
+
+
+
+
+    document.getElementById("adminPanel")
+
+        .style.display =
+
+        "block";
+
+
+
+
+
+    let invoices =
+
+        getAllInvoices();
+
+
+
+
+
+    let container =
+
+        document.getElementById("savedInvoices");
+
+
+
+
+
+    container.innerHTML = "";
+
+
+
+
+
+    let totalSales = 0;
+
+
+
+
+
+    invoices.forEach(function(inv){
+
+
+
+        totalSales +=
+
+            Number(inv.grandTotal) || 0;
+
+
+
+
+
+        let div =
+
+            document.createElement("div");
+
+
+
+
+
+        div.className =
+
+            "saved-invoice";
+
+
+
+
+
+        div.innerHTML = `
+
+
+
+            <div>
+
+
+
+                <strong>
+
+                    ${escapeHTML(inv.invoiceNo)}
+
+                </strong>
+
+
+
+                <br>
+
+
+
+                <small>
+
+                    Date:
+
+                    ${escapeHTML(inv.date)}
+
+                </small>
+
+
+
+                <br>
+
+
+
+                <small>
+
+                    ${escapeHTML(inv.customerName)}
+
+                </small>
+
+
+
+                <br>
+
+
+
+                <span class="badge">
+
+                    ₹${Number(inv.grandTotal).toFixed(2)}
+
+                </span>
+
+
+
+            </div>
+
+
+
+
+
+            <div class="saved-actions">
+
+
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="openSavedInvoice('${encodeURIComponent(inv.invoiceNo)}')">
+
+
+
+                    Open
+
+
+
+                </button>
+
+
+
+
+
+                <button
+
+                    class="btn btn-print"
+
+                    onclick="printSavedInvoice('${encodeURIComponent(inv.invoiceNo)}')">
+
+
+
+                    🖨 Print
+
+
+
+                </button>
+
+
+
+
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="downloadSavedInvoice('${encodeURIComponent(inv.invoiceNo)}')">
+
+
+
+                    📥 PDF
+
+
+
+                </button>
+
+
+
+
+
+                <button
+
+                    class="btn btn-danger"
+
+                    onclick="deleteInvoice('${encodeURIComponent(inv.invoiceNo)}')">
+
+
+
+                    Delete
+
+
+
+                </button>
+
+
+
+            </div>
+
+
+
+        `;
+
+
+
+
+
+        container.appendChild(div);
+
+
+
+    });
+
+
+
+
+
+    document.getElementById("invoiceCount")
+
+        .innerText =
+
+        invoices.length;
+
+
+
+
+
+    document.getElementById("salesTotal")
+
+        .innerText =
+
+        "₹" + totalSales.toFixed(2);
+
+
+
+
+
+    if(invoices.length === 0){
+
+
+
+        container.innerHTML =
+
+            '<div class="empty-message">No invoices saved yet.</div>';
+
+
+
+    }
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   SEARCH INVOICE BY NUMBER
+
+===================================================== */
+
+
+
+function searchInvoice(){
+
+
+
+    let search =
+
+        document.getElementById("invoiceSearch")
+
+            .value
+
+            .trim()
+
+            .toLowerCase();
+
+
+
+
+
+    let result =
+
+        document.getElementById("searchResult");
+
+
+
+
+
+    if(!search){
+
+
+
+        result.innerHTML =
+
+            '<div class="empty-message">Enter invoice number.</div>';
+
+
+
+        return;
+
+
+
+    }
+
+
+
+
+
+    let invoices =
+
+        getAllInvoices();
+
+
+
+
+
+    let matches =
+
+        invoices.filter(function(inv){
+
+
+
+            return String(inv.invoiceNo)
+
+                .toLowerCase()
+
+                .includes(search);
+
+
+
+        });
+
+
+
+
+
+    result.innerHTML = "";
+
+
+
+
+
+    if(matches.length === 0){
+
+
+
+        result.innerHTML = `
+
+
+
+            <div class="empty-message">
+
+
+
+                ❌ Invoice not found.
+
+
+
+                <br><br>
+
+
+
+                Search:
+
+                <strong>${escapeHTML(search)}</strong>
+
+
+
+            </div>
+
+
+
+        `;
+
+
+
+        return;
+
+
+
+    }
+
+
+
+
+
+    matches.forEach(function(inv){
+
+
+
+        let div =
+
+            document.createElement("div");
+
+
+
+
+
+        div.className =
+
+            "saved-invoice";
+
+
+
+
+
+        div.innerHTML = `
+
+
+
+            <div>
+
+
+
+                <strong>
+
+                    ${escapeHTML(inv.invoiceNo)}
+
+                </strong>
+
+
+
+                <br>
+
+
+
+                Date:
+
+                ${escapeHTML(inv.date)}
+
+
+
+                <br>
+
+
+
+                Customer:
+
+                ${escapeHTML(inv.customerName)}
+
+
+
+                <br>
+
+
+
+                Total:
+
+                <span class="badge">
+
+                    ₹${Number(inv.grandTotal).toFixed(2)}
+
+                </span>
+
+
+
+            </div>
+
+
+
+
+
+            <div class="saved-actions">
+
+
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="openSavedInvoice('${encodeURIComponent(inv.invoiceNo)}')">
+
+
+
+                    Open
+
+
+
+                </button>
+
+
+
+
+
+                <button
+
+                    class="btn btn-print"
+
+                    onclick="printSavedInvoice('${encodeURIComponent(inv.invoiceNo)}')">
+
+
+
+                    🖨 Print
+
+
+
+                </button>
+
+
+
+
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="downloadSavedInvoice('${encodeURIComponent(inv.invoiceNo)}')">
+
+
+
+                    📥 PDF
+
+
+
+                </button>
+
+
+
+            </div>
+
+
+
+        `;
+
+
+
+
+
+        result.appendChild(div);
+
+
+
+    });
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   CLEAR SEARCH
+
+===================================================== */
+
+
+
+function clearInvoiceSearch(){
+
+
+
+    document.getElementById("invoiceSearch")
+
+        .value = "";
+
+
+
+
+
+    document.getElementById("searchResult")
+
+        .innerHTML = "";
+
+
+
+
+
+    loadSavedInvoices();
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   FIND ONE INVOICE
+
+===================================================== */
+
+
+
+function findInvoice(invoiceNo){
+
+
+
+    let invoices =
+
+        getAllInvoices();
+
+
+
+
+
+    return invoices.find(function(inv){
+
+
+
+        return String(inv.invoiceNo)
+
+            .toLowerCase()
+
+            === String(invoiceNo)
+
+            .toLowerCase();
+
+
+
+    });
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   LOAD INVOICE INTO FORM
+
+===================================================== */
+
+
+
+function openSavedInvoice(encodedNo){
+
+
+
+    let invoiceNo =
+
+        decodeURIComponent(encodedNo);
+
+
+
+
+
+    let invoice =
+
+        findInvoice(invoiceNo);
+
+
+
+
+
+    if(!invoice){
+
+
+
+        alert("Invoice not found.");
+
+
+
+        return;
+
+
+
+    }
+
+
+
+
+
+    document.getElementById("invoiceNo")
+
+        .value =
+
+        invoice.invoiceNo;
+
+
+
+
+
+    document.getElementById("invoiceDate")
+
+        .value =
+
+        invoice.date;
+
+
+
+
+
+    document.getElementById("customerName")
+
+        .value =
+
+        invoice.customerName;
+
+
+
+
+
+    document.getElementById("customerPhone")
+
+        .value =
+
+        invoice.customerPhone;
+
+
+
+
+
+    document.getElementById("customerEmail")
+
+        .value =
+
+        invoice.customerEmail;
+
+
+
+
+
+    document.getElementById("customerAddress")
+
+        .value =
+
+        invoice.customerAddress;
+
+
+
+
+
+    document.getElementById("gst")
+
+        .value =
+
+        invoice.gstPercent;
+
+
+
+
+
+    document.getElementById("itemsBody")
+
+        .innerHTML = "";
+
+
+
+
+
+    invoice.items.forEach(function(item){
+
+
+
+        createInvoiceItemRow(item);
+
+
+
+    });
+
+
+
+
+
+    calculateTotal();
+
+
+
+
+
+    showPage("invoice");
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   CREATE ITEM ROW FROM SAVED INVOICE
+
+===================================================== */
+
+
+
+function createInvoiceItemRow(item){
+
+
+
+    let tbody =
+
+        document.getElementById("itemsBody");
+
+
+
+
+
+    let row =
+
+        document.createElement("tr");
+
+
+
+
+
+    row.innerHTML = `
+
+
+
+        <td>
+
+
+
+            <input
+
+                type="text"
+
+                class="item-name"
+
+                value="${escapeHTML(item.name)}">
+
+
+
+        </td>
+
+
+
+
+
+        <td>
+
+
+
+            <input
+
+                type="number"
+
+                class="item-qty"
+
+                value="${item.qty}"
+
+                min="1"
+
+                onchange="calculateTotal()">
+
+
+
+        </td>
+
+
+
+
+
+        <td>
+
+
+
+            <input
+
+                type="number"
+
+                class="item-price"
+
+                value="${item.price}"
+
+                min="0"
+
+                onchange="calculateTotal()">
+
+
+
+        </td>
+
+
+
+
+
+        <td class="item-total">
+
+
+
+            ₹${Number(item.total).toFixed(2)}
+
+
+
+        </td>
+
+
+
+
+
+        <td>
+
+
+
+            <button
+
+                class="remove-btn"
+
+                onclick="removeItem(this)">
+
+
+
+                X
+
+
+
+            </button>
+
+
+
+        </td>
+
+
+
+    `;
+
+
+
+
+
+    tbody.appendChild(row);
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   DOWNLOAD SAVED INVOICE
+
+===================================================== */
+
+
+
+function downloadSavedInvoice(encodedNo){
+
+
+
+    let invoiceNo =
+
+        decodeURIComponent(encodedNo);
+
+
+
+
+
+    let invoice =
+
+        findInvoice(invoiceNo);
+
+
+
+
+
+    if(!invoice){
+
+
+
+        alert("Invoice not found.");
+
+
+
+        return;
+
+
+
+    }
+
+
+
+
+
+    loadInvoiceForAction(invoice);
+
+
+
+
+
+    setTimeout(function(){
+
+
+
+        downloadCurrentInvoice();
+
+
+
+    },300);
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   PRINT SAVED INVOICE
+
+===================================================== */
+
+
+
+function printSavedInvoice(encodedNo){
+
+
+
+    let invoiceNo =
+
+        decodeURIComponent(encodedNo);
+
+
+
+
+
+    let invoice =
+
+        findInvoice(invoiceNo);
+
+
+
+
+
+    if(!invoice){
+
+
+
+        alert("Invoice not found.");
+
+
+
+        return;
+
+
+
+    }
+
+
+
+
+
+    loadInvoiceForAction(invoice);
+
+
+
+
+
+    setTimeout(function(){
+
+
+
+        printCurrentInvoice();
+
+
+
+    },300);
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   LOAD INVOICE FOR PRINT / PDF
+
+===================================================== */
+
+
+
+function loadInvoiceForAction(invoice){
+
+
+
+    document.getElementById("invoiceNo")
+
+        .value =
+
+        invoice.invoiceNo;
+
+
+
+
+
+    document.getElementById("invoiceDate")
+
+        .value =
+
+        invoice.date;
+
+
+
+
+
+    document.getElementById("customerName")
+
+        .value =
+
+        invoice.customerName;
+
+
+
+
+
+    document.getElementById("customerPhone")
+
+        .value =
+
+        invoice.customerPhone;
+
+
+
+
+
+    document.getElementById("customerEmail")
+
+        .value =
+
+        invoice.customerEmail;
+
+
+
+
+
+    document.getElementById("customerAddress")
+
+        .value =
+
+        invoice.customerAddress;
+
+
+
+
+
+    document.getElementById("gst")
+
+        .value =
+
+        invoice.gstPercent;
+
+
+
+
+
+    document.getElementById("itemsBody")
+
+        .innerHTML = "";
+
+
+
+
+
+    invoice.items.forEach(function(item){
+
+
+
+        createInvoiceItemRow(item);
+
+
+
+    });
+
+
+
+
+
+    calculateTotal();
+
+
+
+
+
+    generatePreview();
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   DELETE INVOICE
+
+===================================================== */
+
+
+
+function deleteInvoice(encodedNo){
+
+
+
+    let invoiceNo =
+
+        decodeURIComponent(encodedNo);
+
+
+
+
+
+    if(!confirm(
+
+        "Are you sure you want to delete invoice " +
+
+        invoiceNo +
+
+        "?"
+
+    )){
+
+
+
+        return;
+
+
+
+    }
+
+
+
+
+
+    let invoices =
+
+        getAllInvoices();
+
+
+
+
+
+    invoices =
+
+        invoices.filter(function(inv){
+
+
+
+            return String(inv.invoiceNo)
+
+                .toLowerCase()
+
+                !== invoiceNo.toLowerCase();
+
+
+
+        });
+
+
+
+
+
+    localStorage.setItem(
+
+        "jegaInvoices",
+
+        JSON.stringify(invoices)
+
+    );
+
+
+
+
+
+    loadSavedInvoices();
+
+
+
+
+
+    let searchBox =
+
+        document.getElementById("invoiceSearch");
+
+
+
+
+
+    if(searchBox.value){
+
+
+
+        searchInvoice();
+
+
+
+    }
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   CONTACT
+
+===================================================== */
+
+
+
+function sendEnquiry(event){
+
+
+
+    event.preventDefault();
+
+
+
+
+
+    let name =
+
+        document.getElementById("contactName")
+
+            .value;
+
+
+
+
+
+    let email =
+
+        document.getElementById("contactEmail")
+
+            .value;
+
+
+
+
+
+    let message =
+
+        document.getElementById("contactMessage")
+
+            .value;
+
+
+
+
+
+    let subject =
+
+        encodeURIComponent(
+
+            "Jega Printing Enquiry - " + name
+
+        );
+
+
+
+
+
+    let body =
+
+        encodeURIComponent(
+
+
+
+            "Name: " + name +
+
+
+
+            "\nEmail: " + email +
+
+
+
+            "\n\nMessage:\n" + message
+
+
+
+        );
+
+
+
+
+
+    window.location.href =
+
+        "mailto:Jegaprinting4015@mail.com?subject="
+
+        + subject +
+
+        "&body=" + body;
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   ESCAPE HTML
+
+===================================================== */
+
+
+
+function escapeHTML(str){
+
+
+
+    return String(str || "")
+
+
+
+        .replace(/&/g,"&amp;")
+
+
+
+        .replace(/</g,"&lt;")
+
+
+
+        .replace(/>/g,"&gt;")
+
+
+
+        .replace(/"/g,"&quot;")
+
+
+
+        .replace(/'/g,"&#039;");
+
+
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+
+   INITIAL CALCULATION
+
+===================================================== */
+
+
+
+calculateTotal();
+
+
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
+<!-- =========================================================
+     PHP + MYSQL BACKEND OVERRIDES
+     This block replaces the browser localStorage invoice storage
+     with the WAMP/PHP/MySQL API.
+========================================================= -->
+<script>
+const API_BASE = "api";
+
+async function apiRequest(url, options = {}) {
+    const response = await fetch(`${API_BASE}/${url}`, {
+        credentials: "same-origin",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+        }
+    });
+
+    let result;
+    try {
+        result = await response.json();
+    } catch (e) {
+        throw new Error("Server returned an invalid response.");
+    }
+
+    if (!response.ok || result.success === false) {
+        throw new Error(result.message || "Server request failed.");
+    }
+    return result;
+}
+
+async function getAllInvoices() {
+    try {
+        const result = await apiRequest("invoices.php");
+        return result.invoices || [];
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
+
+async function generateInvoiceNumber() {
+    try {
+        const result = await apiRequest("next_invoice.php");
+        return result.invoiceNo || "INV-0001";
+    } catch (error) {
+        console.error(error);
+        return "INV-0001";
+    }
+}
+
+async function setNextInvoiceNumber() {
+    const input = document.getElementById("invoiceNo");
+    if (!input) return;
+    try {
+        input.value = await generateInvoiceNumber();
+    } catch (e) {
+        input.value = "INV-0001";
+    }
+}
+
+async function saveInvoice() {
+    const data = getInvoiceData();
+
+    if (!data.invoiceNo) {
+        alert("Please enter invoice number.");
+        return;
+    }
+    if (!data.customerName) {
+        alert("Please enter customer name.");
+        return;
+    }
+    if (data.items.length === 0) {
+        alert("Please add at least one item.");
+        return;
+    }
+
+    const button = event && event.target ? event.target : null;
+    if (button) button.disabled = true;
+
+    try {
+        const result = await apiRequest("invoices.php", {
+            method: "POST",
+            body: JSON.stringify(data)
+        });
+
+        alert(result.message || "Invoice saved successfully!");
+        await setNextInvoiceNumber();
+        await loadSavedInvoices();
+    } catch (error) {
+        console.error(error);
+        alert("Unable to save invoice: " + error.message);
+    } finally {
+        if (button) button.disabled = false;
+    }
+}
+
+async function findInvoice(invoiceNo) {
+    try {
+        const result = await apiRequest(
+            "invoices.php?invoice_no=" + encodeURIComponent(invoiceNo)
+        );
+        return result.invoice || null;
+    } catch (error) {
+        return null;
+    }
+}
+
+async function loadSavedInvoices() {
+    const loginBox = document.getElementById("loginBox");
+    const adminPanel = document.getElementById("adminPanel");
+
+    try {
+        const status = await apiRequest("admin_status.php");
+
+        if (!status.loggedIn) {
+            if (loginBox) loginBox.style.display = "block";
+            if (adminPanel) adminPanel.style.display = "none";
+            return;
+        }
+
+        if (loginBox) loginBox.style.display = "none";
+        if (adminPanel) adminPanel.style.display = "block";
+
+        const invoices = await getAllInvoices();
+        const container = document.getElementById("savedInvoices");
+        if (!container) return;
+
+        container.innerHTML = "";
+        let totalSales = 0;
+
+        invoices.forEach(function(inv) {
+            totalSales += Number(inv.grandTotal) || 0;
+
+            const div = document.createElement("div");
+            div.className = "saved-invoice";
+
+            div.innerHTML = `
+                <div>
+                    <strong>${escapeHTML(inv.invoiceNo)}</strong><br>
+                    <small>Date: ${escapeHTML(inv.date)}</small><br>
+                    <small>${escapeHTML(inv.customerName)}</small><br>
+                    <span class="badge">₹${Number(inv.grandTotal).toFixed(2)}</span>
+                </div>
+                <div class="saved-actions">
+                    <button class="btn btn-primary" onclick="openSavedInvoice('${encodeURIComponent(inv.invoiceNo)}')">Open</button>
+                    <button class="btn btn-print" onclick="printSavedInvoice('${encodeURIComponent(inv.invoiceNo)}')">🖨 Print</button>
+                    <button class="btn btn-primary" onclick="downloadSavedInvoice('${encodeURIComponent(inv.invoiceNo)}')">📥 PDF</button>
+                    <button class="btn btn-danger" onclick="deleteInvoice('${encodeURIComponent(inv.invoiceNo)}')">Delete</button>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+
+        document.getElementById("invoiceCount").innerText = invoices.length;
+        document.getElementById("salesTotal").innerText = "₹" + totalSales.toFixed(2);
+
+        if (invoices.length === 0) {
+            container.innerHTML = '<div class="empty-message">No invoices saved yet.</div>';
+        }
+    } catch (error) {
+        console.error(error);
+        if (loginBox) loginBox.style.display = "block";
+        if (adminPanel) adminPanel.style.display = "none";
+    }
+}
+
+async function searchInvoice() {
+    const search = document.getElementById("invoiceSearch").value.trim();
+    const resultBox = document.getElementById("searchResult");
+
+    if (!search) {
+        resultBox.innerHTML = '<div class="empty-message">Enter invoice number.</div>';
+        return;
+    }
+
+    try {
+        const result = await apiRequest("invoices.php?search=" + encodeURIComponent(search));
+        const matches = result.invoices || [];
+        resultBox.innerHTML = "";
+
+        if (matches.length === 0) {
+            resultBox.innerHTML = `
+                <div class="empty-message">
+                    ❌ Invoice not found.<br><br>
+                    Search: <strong>${escapeHTML(search)}</strong>
+                </div>`;
+            return;
+        }
+
+        matches.forEach(function(inv) {
+            const div = document.createElement("div");
+            div.className = "saved-invoice";
+            div.innerHTML = `
+                <div>
+                    <strong>${escapeHTML(inv.invoiceNo)}</strong><br>
+                    Date: ${escapeHTML(inv.date)}<br>
+                    Customer: ${escapeHTML(inv.customerName)}<br>
+                    Total: <span class="badge">₹${Number(inv.grandTotal).toFixed(2)}</span>
+                </div>
+                <div class="saved-actions">
+                    <button class="btn btn-primary" onclick="openSavedInvoice('${encodeURIComponent(inv.invoiceNo)}')">Open</button>
+                    <button class="btn btn-print" onclick="printSavedInvoice('${encodeURIComponent(inv.invoiceNo)}')">🖨 Print</button>
+                    <button class="btn btn-primary" onclick="downloadSavedInvoice('${encodeURIComponent(inv.invoiceNo)}')">📥 PDF</button>
+                </div>
+            `;
+            resultBox.appendChild(div);
+        });
+    } catch (error) {
+        resultBox.innerHTML = '<div class="empty-message">Server error: ' + escapeHTML(error.message) + '</div>';
+    }
+}
+
+async function openSavedInvoice(encodedNo) {
+    const invoiceNo = decodeURIComponent(encodedNo);
+    const invoice = await findInvoice(invoiceNo);
+
+    if (!invoice) {
+        alert("Invoice not found.");
+        return;
+    }
+
+    loadInvoiceIntoForm(invoice);
+    showPage("invoice");
+}
+
+async function loadInvoiceForAction(invoiceOrNo) {
+    let invoice = invoiceOrNo;
+    if (typeof invoiceOrNo === "string") {
+        invoice = await findInvoice(invoiceOrNo);
+    }
+
+    if (!invoice) {
+        alert("Invoice not found.");
+        return null;
+    }
+
+    loadInvoiceIntoForm(invoice);
+    generatePreview();
+    return invoice;
+}
+
+function loadInvoiceIntoForm(invoice) {
+    document.getElementById("invoiceNo").value = invoice.invoiceNo || "";
+    document.getElementById("invoiceDate").value = invoice.date || "";
+    document.getElementById("customerName").value = invoice.customerName || "";
+    document.getElementById("customerPhone").value = invoice.customerPhone || "";
+    document.getElementById("customerEmail").value = invoice.customerEmail || "";
+    document.getElementById("customerAddress").value = invoice.customerAddress || "";
+    document.getElementById("gst").value = invoice.gstPercent || 0;
+
+    document.getElementById("itemsBody").innerHTML = "";
+    (invoice.items || []).forEach(function(item) {
+        createInvoiceItemRow(item);
+    });
+
+    if ((invoice.items || []).length === 0) addItem();
+    calculateTotal();
+}
+
+async function downloadSavedInvoice(encodedNo) {
+    const invoiceNo = decodeURIComponent(encodedNo);
+    const invoice = await loadInvoiceForAction(invoiceNo);
+    if (!invoice) return;
+
+    setTimeout(function() {
+        downloadCurrentInvoice();
+    }, 100);
+}
+
+async function printSavedInvoice(encodedNo) {
+    const invoiceNo = decodeURIComponent(encodedNo);
+    const invoice = await loadInvoiceForAction(invoiceNo);
+    if (!invoice) return;
+
+    setTimeout(function() {
+        printCurrentInvoice();
+    }, 100);
+}
+
+async function deleteInvoice(encodedNo) {
+    const invoiceNo = decodeURIComponent(encodedNo);
+
+    if (!confirm("Are you sure you want to delete invoice " + invoiceNo + "?")) {
+        return;
+    }
+
+    try {
+        const result = await apiRequest(
+            "invoices.php?invoice_no=" + encodeURIComponent(invoiceNo),
+            { method: "DELETE" }
+        );
+        alert(result.message || "Invoice deleted successfully.");
+        await loadSavedInvoices();
+
+        const searchBox = document.getElementById("invoiceSearch");
+        if (searchBox && searchBox.value) await searchInvoice();
+    } catch (error) {
+        alert("Unable to delete invoice: " + error.message);
+    }
+}
+
+async function adminLogin() {
+    const username = document.getElementById("adminUser").value.trim();
+    const password = document.getElementById("adminPass").value;
+    const errorBox = document.getElementById("loginError");
+
+    errorBox.innerText = "";
+
+    try {
+        const result = await apiRequest("admin_login.php", {
+            method: "POST",
+            body: JSON.stringify({ username, password })
+        });
+
+        if (result.success) {
+            document.getElementById("adminUser").value = "";
+            document.getElementById("adminPass").value = "";
+            await loadSavedInvoices();
+        }
+    } catch (error) {
+        errorBox.innerText = error.message || "Invalid username or password.";
+    }
+}
+
+async function adminLogout() {
+    try {
+        await apiRequest("admin_logout.php", { method: "POST", body: "{}" });
+    } catch (error) {
+        console.error(error);
+    }
+
+    document.getElementById("loginBox").style.display = "block";
+    document.getElementById("adminPanel").style.display = "none";
+}
+
+function showPage(page) {
+    document.querySelectorAll('.page').forEach(function(p) {
+        p.classList.remove('active');
+    });
+
+    document.getElementById(page).classList.add('active');
+
+    document.querySelectorAll('nav button').forEach(function(btn) {
+        btn.classList.remove('active');
+    });
+
+    const navMap = {
+        home: 'navHome',
+        invoice: 'navInvoice',
+        contact: 'navContact',
+        admin: 'navAdmin'
+    };
+
+    if (navMap[page]) {
+        document.getElementById(navMap[page]).classList.add('active');
+    }
+
+    if (page === 'admin') {
+        loadSavedInvoices();
+    }
+
+    window.scrollTo(0, 0);
+}
+
+// Make sure the first invoice number comes from MySQL.
+setNextInvoiceNumber();
+</script>
